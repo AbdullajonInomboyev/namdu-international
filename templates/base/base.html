@@ -44,19 +44,7 @@
         </ul>
       </div>
       <div class="header-top-right">
-        <!-- Til tanlash -->
-        <div class="lang-switcher me-3">
-          <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-            <select name="language" onchange="this.form.submit()" class="lang-select">
-              {% get_available_languages as LANGUAGES %}
-              {% for code, name in LANGUAGES %}
-                <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>{{ name }}</option>
-              {% endfor %}
-            </select>
-          </form>
-        </div>
+
         <a href="{{ site_settings.namdu_main_url }}" target="_blank" class="edu-btn btn-secondary btn-small">
           NamDU.uz <i class="ri-external-link-line"></i>
         </a>
