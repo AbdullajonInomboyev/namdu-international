@@ -1,0 +1,59 @@
+{% extends "base/base.html" %}
+{% block title %}Akademik Mobillik{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">Akademik Mobillik</li>
+    </ul>
+    <h1 class="breadcrumb-title">Academic Mobility</h1>
+    <p style="color:rgba(255,255,255,.7);">Erasmus+, DAAD, Fulbright va boshqa xalqaro dasturlar</p>
+  </div>
+</div>
+<div class="counterup-area">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-3 col-6"><div class="counter-item"><span class="count-number">{{ stats.total_programs }}</span><span class="count-label">Aktiv dasturlar</span></div></div>
+      <div class="col-lg-3 col-6"><div class="counter-item"><span class="count-number">{{ stats.total_outgoing }}</span><span class="count-label">Chiquvchi talabalar</span></div></div>
+      <div class="col-lg-3 col-6"><div class="counter-item"><span class="count-number">{{ stats.total_incoming }}</span><span class="count-label">Kiruvchi talabalar</span></div></div>
+    </div>
+  </div>
+</div>
+<div class="edu-section">
+  <div class="container">
+    <div class="section-title section-center mb-5">
+      <h2 class="title">Mobillik Dasturlari</h2>
+      <span class="shape-line"></span>
+    </div>
+    <div class="row g-4">
+      {% for program in page_obj %}
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card p-4 h-100" style="border-radius:12px;border-top:3px solid var(--color-primary);">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h6 style="font-family:var(--font-secondary);font-size:16px;margin:0;">{{ program.name }}</h6>
+            <span style="font-size:11px;background:var(--color-lighten01);color:var(--color-primary);padding:2px 8px;border-radius:3px;font-weight:700;white-space:nowrap;">{{ program.get_program_type_display }}</span>
+          </div>
+          {% if program.host_country %}<p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-map-pin-line" style="color:var(--color-primary);"></i> {{ program.host_country }}</p>{% endif %}
+          {% if program.host_university %}<p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-building-4-line" style="color:var(--color-primary);"></i> {{ program.host_university.name|truncatechars:40 }}</p>{% endif %}
+          <p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-time-line" style="color:var(--color-primary);"></i> {{ program.duration_months }} oy</p>
+          {% if program.deadline %}<p style="font-size:13px;margin-bottom:10px;"><i class="ri-calendar-line" style="color:var(--color-secondary);"></i> <span style="color:var(--color-secondary);font-weight:600;">Muddat: {{ program.deadline|date:"d.m.Y" }}</span></p>{% endif %}
+          {% if program.description_uz %}<p style="font-size:13px;color:var(--color-body);line-height:1.6;">{{ program.description_uz|truncatechars:120 }}</p>{% endif %}
+          {% if program.url %}<a href="{{ program.url }}" target="_blank" class="edu-btn btn-primary btn-small mt-2">Batafsil <i class="ri-external-link-line"></i></a>{% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5"><i class="ri-flight-takeoff-line" style="font-size:64px;color:#ddd;"></i><p class="mt-3" style="color:var(--color-body);">Mobillik dasturlari admin paneldan qo'shiladi</p></div>
+      {% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <ul class="edu-pagination mt-5">
+      {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="ri-arrow-left-s-line"></i></a></li>{% endif %}
+      {% for num in page_obj.paginator.page_range %}<li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endfor %}
+      {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="ri-arrow-right-s-line"></i></a></li>{% endif %}
+    </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

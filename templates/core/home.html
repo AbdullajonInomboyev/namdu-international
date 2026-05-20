@@ -1,0 +1,267 @@
+{% extends "base/base.html" %}
+{% load static i18n %}
+{% block title %}Xalqaro Bo'lim — Bosh Sahifa{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO SLIDER ===== -->
+<div class="hero-slider-wrap" id="heroSlider">
+  {% if slides %}
+    {% for slide in slides %}
+    <div class="hero-slide {% if forloop.first %}active{% endif %}" data-duration="{{ slide.auto_play_duration }}000">
+
+      <!-- MEDIA BACKGROUND -->
+      {% if slide.media_type == 'video' and slide.video %}
+        <video class="hero-media-bg" autoplay muted loop playsinline poster="{% if slide.video_poster %}{{ slide.video_poster.url }}{% endif %}">
+          <source src="{{ slide.video.url }}" type="video/mp4">
+        </video>
+      {% elif slide.image %}
+        <img src="{{ slide.image.url }}" alt="" class="hero-img-bg">
+      {% else %}
+        <div class="hero-media-bg" style="background:linear-gradient(135deg,#0d1b2a 0%,#1a3a4a 50%,#0a2535 100%);"></div>
+      {% endif %}
+
+      <!-- OVERLAY -->
+      <div class="hero-overlay" style="background:{{ slide.overlay_color }};opacity:{{ slide.overlay_opacity }};"></div>
+
+      <!-- CONTENT -->
+      <div class="hero-slide-content">
+        <div class="container">
+          <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+              <div class="hero-content">
+                <span class="pre-title">www.namdu.uz / international</span>
+                <h1 class="title">{{ slide.title_uz }}</h1>
+                {% if slide.subtitle_uz %}<p>{{ slide.subtitle_uz }}</p>{% endif %}
+                <div class="hero-btn-group">
+                  {% if slide.btn_text_uz %}
+                  <a href="{{ slide.btn_url }}" class="edu-btn btn-primary">{{ slide.btn_text_uz }} <i class="ri-arrow-right-line"></i></a>
+                  {% endif %}
+                  {% if slide.btn2_text_uz %}
+                  <a href="{{ slide.btn2_url }}" class="edu-btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4);">{{ slide.btn2_text_uz }}</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+              <div class="hero-stats">
+                <div class="stat-card"><span class="stat-number">{{ stats.partner_universities }}+</span><span class="stat-label">Hamkor universitetlar</span></div>
+                <div class="stat-card"><span class="stat-number">{{ stats.partner_countries }}</span><span class="stat-label">Hamkor davlatlar</span></div>
+                <div class="stat-card"><span class="stat-number">{{ stats.exchange_students }}</span><span class="stat-label">Almashinuv talabalari</span></div>
+                <div class="stat-card"><span class="stat-number">{{ stats.scopus_articles }}</span><span class="stat-label">Scopus maqolalar</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- SLIDER CONTROLS -->
+    {% if slides.count > 1 %}
+    <button class="hero-nav hero-prev" id="heroPrev"><i class="ri-arrow-left-s-line"></i></button>
+    <button class="hero-nav hero-next" id="heroNext"><i class="ri-arrow-right-s-line"></i></button>
+    <div class="hero-dots" id="heroDots">
+      {% for slide in slides %}
+      <button class="hero-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}"></button>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  {% else %}
+    <!-- DEFAULT HERO (slayd yo'q bo'lsa) -->
+    <div class="hero-slide active">
+      <div class="hero-media-bg" style="background:linear-gradient(135deg,#0d1b2a 0%,#1a3a4a 50%,#0a2535 100%);"></div>
+      <div class="hero-overlay" style="background:#000;opacity:0.3;"></div>
+      <div class="hero-slide-content">
+        <div class="container">
+          <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+              <div class="hero-content">
+                <span class="pre-title">www.namdu.uz / international</span>
+                <h1 class="title">Global Aloqalar,<br><span>Mahalliy Muvaffaqiyat</span></h1>
+                <p>Namangan davlat universiteti xalqaro hamkorlik, akademik mobillik va ilmiy tadqiqotlar orqali jahon ta'lim maydonida mustahkam o'rin egallaydi.</p>
+                <div class="hero-btn-group">
+                  <a href="{% url 'partnerships:index' %}" class="edu-btn btn-primary">Hamkorlar <i class="ri-arrow-right-line"></i></a>
+                  <a href="{% url 'news:index' %}" class="edu-btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4);">Yangiliklar</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+              <div class="hero-stats">
+                <div class="stat-card"><span class="stat-number">{{ stats.partner_universities }}+</span><span class="stat-label">Hamkor universitetlar</span></div>
+                <div class="stat-card"><span class="stat-number">{{ stats.partner_countries }}</span><span class="stat-label">Hamkor davlatlar</span></div>
+                <div class="stat-card"><span class="stat-number">{{ stats.exchange_students }}</span><span class="stat-label">Almashinuv talabalari</span></div>
+                <div class="stat-card"><span class="stat-number">{{ stats.scopus_articles }}</span><span class="stat-label">Scopus maqolalar</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- QUICK LINKS -->
+<div class="container">
+  <div class="quick-links-area">
+    <div class="row g-3">
+      {% for link in quick_links %}
+      <div class="col-lg-3 col-md-6 col-12">
+        <a href="{{ link.url }}" class="quick-link-item" target="_blank">
+          <div class="quick-link-icon" style="background:{{ link.color }}20;color:{{ link.color }};"><i class="{{ link.icon_class }}"></i></div>
+          <div class="quick-link-text">
+            <div class="title">{{ link.title_uz }}</div>
+            <div class="desc">{{ link.description_uz }}</div>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <div class="col-lg-3 col-md-6"><a href="https://my.namdu.uz" class="quick-link-item"><div class="quick-link-icon" style="background:rgba(26,182,157,.1);color:#1ab69d;"><i class="ri-global-line"></i></div><div class="quick-link-text"><div class="title">Hemis OTM</div><div class="desc">O'qituvchi va xodimlar</div></div></a></div>
+      <div class="col-lg-3 col-md-6"><a href="{% url 'mobility:index' %}" class="quick-link-item"><div class="quick-link-icon" style="background:rgba(238,74,98,.1);color:#ee4a62;"><i class="ri-flight-takeoff-line"></i></div><div class="quick-link-text"><div class="title">Erasmus+</div><div class="desc">Mobillik dasturlari</div></div></a></div>
+      <div class="col-lg-3 col-md-6"><a href="{% url 'research:index' %}" class="quick-link-item"><div class="quick-link-icon" style="background:rgba(248,184,31,.1);color:#f8b81f;"><i class="ri-article-line"></i></div><div class="quick-link-text"><div class="title">Scopus</div><div class="desc">Ilmiy nashrlar</div></div></a></div>
+      <div class="col-lg-3 col-md-6"><a href="{% url 'reports:index' %}" class="quick-link-item"><div class="quick-link-icon" style="background:rgba(83,74,183,.1);color:#534ab7;"><i class="ri-file-pdf-line"></i></div><div class="quick-link-text"><div class="title">Hisobotlar</div><div class="desc">Yillik hisobotlar</div></div></a></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- SO'NGGI YANGILIKLAR -->
+<div class="edu-section">
+  <div class="container">
+    <div class="section-title section-center">
+      <h2 class="title">So'nggi Yangiliklar</h2>
+      <span class="shape-line"></span>
+    </div>
+    <div class="row g-5">
+      {% for news in latest_news %}
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="edu-blog blog-style-3">
+          <div class="inner">
+            <div class="thumbnail">
+              {% if news.image %}<img src="{{ news.image.url }}" alt="{{ news.title_uz }}" loading="lazy">
+              {% else %}<div style="background:linear-gradient(135deg,#1ab69d,#0d8a74);height:200px;display:flex;align-items:center;justify-content:center;"><i class="ri-newspaper-line" style="font-size:48px;color:rgba(255,255,255,.4);"></i></div>{% endif %}
+              {% if news.category %}<div class="blog-category" style="background:{{ news.category.color }};">{{ news.category.name_uz }}</div>{% endif %}
+            </div>
+            <div class="content">
+              <div class="blog-meta">
+                <span><i class="ri-calendar-line"></i>{{ news.published_at|date:"d.m.Y" }}</span>
+                <span><i class="ri-eye-line"></i>{{ news.views }}</span>
+              </div>
+              <h6 class="title"><a href="{% url 'news:detail' news.slug %}">{{ news.title_uz|truncatechars:80 }}</a></h6>
+              <a href="{% url 'news:detail' news.slug %}" class="read-more-btn">Batafsil o'qish <i class="ri-arrow-right-line"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-4"><p style="color:var(--color-body);">Yangiliklar admin paneldan qo'shiladi</p></div>
+      {% endfor %}
+    </div>
+    {% if latest_news %}<div class="text-center mt-5"><a href="{% url 'news:index' %}" class="edu-btn btn-outline">Barcha yangiliklar <i class="ri-arrow-right-line"></i></a></div>{% endif %}
+  </div>
+</div>
+
+<!-- COUNTERUP -->
+<div class="counterup-area">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6 col-6"><div class="counter-item"><span class="count-number">{{ stats.partner_universities }}</span><span class="count-label">Hamkor universitetlar</span></div></div>
+      <div class="col-lg-3 col-md-6 col-6"><div class="counter-item"><span class="count-number">{{ stats.partner_countries }}</span><span class="count-label">Davlatlar</span></div></div>
+      <div class="col-lg-3 col-md-6 col-6"><div class="counter-item"><span class="count-number">{{ stats.exchange_students }}</span><span class="count-label">Almashinuv talabalari</span></div></div>
+      <div class="col-lg-3 col-md-6 col-6"><div class="counter-item"><span class="count-number">{{ stats.scopus_articles }}</span><span class="count-label">Scopus maqolalar</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 11 BO'LIM KARTALAR -->
+<div class="edu-section edu-section-bg">
+  <div class="container">
+    <div class="section-title section-center">
+      <h2 class="title">Barcha Bo'limlar</h2>
+      <span class="shape-line"></span>
+    </div>
+    <div class="section-grid">
+      <a href="{% url 'news:index' %}" class="section-card" style="--card-color:#1ab69d;--card-bg:rgba(26,182,157,.1);"><div class="card-icon"><i class="ri-newspaper-line"></i></div><div class="card-number">01</div><div class="card-title">International News</div><div class="card-desc">Xalqaro yangiliklar va e'lonlar</div><div class="card-tags"><span>QS</span><span>THE</span></div></a>
+      <a href="{% url 'rankings:index' %}" class="section-card" style="--card-color:#f8b81f;--card-bg:rgba(248,184,31,.1);"><div class="card-icon"><i class="ri-trophy-line"></i></div><div class="card-number">02</div><div class="card-title">Rankings & Recognition</div><div class="card-desc">Xalqaro reytinglar</div><div class="card-tags"><span>QS</span><span>THE</span><span>WURI</span></div></a>
+      <a href="{% url 'sustainability:index' %}" class="section-card" style="--card-color:#3eb75e;--card-bg:rgba(62,183,94,.1);"><div class="card-icon"><i class="ri-leaf-line"></i></div><div class="card-number">03</div><div class="card-title">Sustainability & SDGs</div><div class="card-desc">Barqarorlik va SDG maqsadlar</div><div class="card-tags"><span>THE</span><span>GreenMetric</span></div></a>
+      <a href="{% url 'research:index' %}" class="section-card" style="--card-color:#ee4a62;--card-bg:rgba(238,74,98,.1);"><div class="card-icon"><i class="ri-flask-line"></i></div><div class="card-number">04</div><div class="card-title">Research & Innovation</div><div class="card-desc">Ilmiy nashrlar va grantlar</div><div class="card-tags"><span>Scopus</span><span>WoS</span></div></a>
+      <a href="{% url 'partnerships:index' %}" class="section-card" style="--card-color:#1ba2db;--card-bg:rgba(27,162,219,.1);"><div class="card-icon"><i class="ri-handshake-line"></i></div><div class="card-number">05</div><div class="card-title">International Partners</div><div class="card-desc">Hamkor universitetlar va MOU</div><div class="card-tags"><span>QS</span><span>THE</span></div></a>
+      <a href="{% url 'mobility:index' %}" class="section-card" style="--card-color:#534ab7;--card-bg:rgba(83,74,183,.1);"><div class="card-icon"><i class="ri-flight-takeoff-line"></i></div><div class="card-number">06</div><div class="card-title">Academic Mobility</div><div class="card-desc">Erasmus+, DAAD va boshqa dasturlar</div><div class="card-tags"><span>Erasmus+</span><span>DAAD</span></div></a>
+      <a href="{% url 'students:index' %}" class="section-card" style="--card-color:#f8941f;--card-bg:rgba(248,148,31,.1);"><div class="card-icon"><i class="ri-graduation-cap-line"></i></div><div class="card-number">07</div><div class="card-title">International Students</div><div class="card-desc">Xorijiy va almashinuv talabalari</div><div class="card-tags"><span>QS</span><span>UniRank</span></div></a>
+      <a href="{% url 'professors:index' %}" class="section-card" style="--card-color:#da04f8;--card-bg:rgba(218,4,248,.07);"><div class="card-icon"><i class="ri-user-star-line"></i></div><div class="card-number">08</div><div class="card-title">Visiting Professors</div><div class="card-desc">Xorijiy mehmon olimlar</div><div class="card-tags"><span>QS</span><span>THE</span></div></a>
+      <a href="{% url 'conferences:index' %}" class="section-card" style="--card-color:#39c0fa;--card-bg:rgba(57,192,250,.1);"><div class="card-icon"><i class="ri-mic-line"></i></div><div class="card-number">09</div><div class="card-title">Conferences & Events</div><div class="card-desc">Xalqaro konferensiyalar</div><div class="card-tags"><span>QS</span><span>SCImago</span></div></a>
+      <a href="{% url 'community:index' %}" class="section-card" style="--card-color:#0ecd73;--card-bg:rgba(14,205,115,.1);"><div class="card-icon"><i class="ri-community-line"></i></div><div class="card-number">10</div><div class="card-title">Community & Social Impact</div><div class="card-desc">Jamoaviy loyihalar</div><div class="card-tags"><span>WURI</span><span>GreenMetric</span></div></a>
+      <a href="{% url 'reports:index' %}" class="section-card" style="--card-color:#5866eb;--card-bg:rgba(88,102,235,.1);"><div class="card-icon"><i class="ri-file-chart-line"></i></div><div class="card-number">11</div><div class="card-title">Reports & Policies</div><div class="card-desc">Hisobotlar va siyosat hujjatlari</div><div class="card-tags"><span>QS</span><span>Webometrics</span></div></a>
+    </div>
+  </div>
+</div>
+
+{% if partners %}
+<div class="edu-section">
+  <div class="container">
+    <div class="section-title section-center"><h2 class="title">Hamkor Universitetlar</h2><span class="shape-line"></span></div>
+    <div class="row g-4">
+      {% for partner in partners %}
+      <div class="col-lg-2 col-md-3 col-6">
+        <a href="{% url 'partnerships:detail' partner.pk %}" class="partner-card d-block text-decoration-none">
+          {% if partner.logo %}<img src="{{ partner.logo.url }}" alt="{{ partner.name }}">{% else %}<div style="height:60px;display:flex;align-items:center;justify-content:center;"><i class="ri-building-4-line" style="font-size:32px;color:#ccc;"></i></div>{% endif %}
+          <div class="partner-name">{{ partner.short_name|default:partner.name|truncatechars:28 }}</div>
+          <div class="partner-country">{{ partner.country }}</div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-5"><a href="{% url 'partnerships:index' %}" class="edu-btn btn-outline">Barcha hamkorlar <i class="ri-arrow-right-line"></i></a></div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== HERO SLIDER =====
+(function(){
+  var slider = document.getElementById('heroSlider');
+  if(!slider) return;
+  var slides = slider.querySelectorAll('.hero-slide');
+  var dots = slider.querySelectorAll('.hero-dot');
+  if(slides.length <= 1) return;
+
+  var current = 0;
+  var timer;
+
+  function goTo(idx){
+    slides[current].classList.remove('active');
+    if(dots[current]) dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    if(dots[current]) dots[current].classList.add('active');
+    resetTimer();
+  }
+
+  function resetTimer(){
+    clearInterval(timer);
+    var dur = parseInt(slides[current].dataset.duration) || 5000;
+    timer = setInterval(function(){ goTo(current+1); }, dur);
+  }
+
+  var prev = document.getElementById('heroPrev');
+  var next = document.getElementById('heroNext');
+  if(prev) prev.addEventListener('click', function(){ goTo(current-1); });
+  if(next) next.addEventListener('click', function(){ goTo(current+1); });
+  dots.forEach(function(dot, i){ dot.addEventListener('click', function(){ goTo(i); }); });
+
+  // Touch swipe
+  var startX = 0;
+  slider.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+  slider.addEventListener('touchend', function(e){
+    var diff = startX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 50){ goTo(diff > 0 ? current+1 : current-1); }
+  }, {passive:true});
+
+  resetTimer();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base/base.html" %}
+{% block title %}Hisobotlar{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">Hisobotlar</li>
+    </ul>
+    <h1 class="breadcrumb-title">Reports & Policies</h1>
+    <p style="color:rgba(255,255,255,.7);">QS · Webometrics — Rasmiy hisobotlar va siyosat hujjatlari</p>
+  </div>
+</div>
+<div class="edu-section">
+  <div class="container">
+    <div class="section-tabs mb-5">
+      <a href="{% url 'reports:index' %}" class="tab-btn {% if not selected_type %}active{% endif %}">Barchasi</a>
+      {% for val, label in types %}
+      <a href="?type={{ val }}" class="tab-btn {% if selected_type == val %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+    <div class="row g-4">
+      {% for report in reports %}
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card h-100" style="border-radius:12px;overflow:hidden;">
+          {% if report.cover_image %}<img src="{{ report.cover_image.url }}" class="w-100" style="height:160px;object-fit:cover;">
+          {% else %}<div style="background:linear-gradient(135deg,#5866eb,#3a47c5);height:160px;display:flex;align-items:center;justify-content:center;"><i class="ri-file-chart-line" style="font-size:48px;color:rgba(255,255,255,.4);"></i></div>{% endif %}
+          <div class="p-4">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span style="font-size:11px;background:#f0f0ff;color:#5866eb;padding:2px 8px;border-radius:3px;font-weight:700;">{{ report.get_report_type_display }}</span>
+              <span style="font-size:20px;font-weight:800;color:var(--color-primary);font-family:var(--font-secondary);">{{ report.year }}</span>
+            </div>
+            <h6 style="font-family:var(--font-secondary);font-size:15px;margin-bottom:10px;line-height:1.4;">{{ report.title_uz }}</h6>
+            {% if report.description_uz %}<p style="font-size:13px;color:var(--color-body);">{{ report.description_uz|truncatechars:100 }}</p>{% endif %}
+            {% if report.pages %}<p style="font-size:12.5px;color:var(--color-body);"><i class="ri-pages-line" style="color:var(--color-primary);"></i> {{ report.pages }} sahifa</p>{% endif %}
+            <div class="d-flex gap-2 mt-3">
+              {% if report.file_uz %}<a href="{{ report.file_uz.url }}" target="_blank" class="edu-btn btn-primary btn-small"><i class="ri-download-line"></i> UZ</a>{% endif %}
+              {% if report.file_en %}<a href="{{ report.file_en.url }}" target="_blank" class="edu-btn btn-outline btn-small"><i class="ri-download-line"></i> EN</a>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5"><i class="ri-file-chart-line" style="font-size:64px;color:#ddd;"></i><p class="mt-3" style="color:var(--color-body);">Hisobotlar admin paneldan qo'shiladi</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+{% block title %}{{ news.title_uz }}{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li><a href="{% url 'news:index' %}">Yangiliklar</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">{{ news.title_uz|truncatechars:40 }}</li>
+    </ul>
+    <h1 class="breadcrumb-title" style="font-size:28px;">{{ news.title_uz }}</h1>
+  </div>
+</div>
+<div class="edu-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        {% if news.image %}<img src="{{ news.image.url }}" alt="{{ news.title_uz }}" class="w-100 mb-4" style="border-radius:12px;max-height:420px;object-fit:cover;">{% endif %}
+        <div class="blog-meta mb-3">
+          <span><i class="ri-calendar-line"></i> {{ news.published_at|date:"d.m.Y" }}</span>
+          <span class="ms-3"><i class="ri-eye-line"></i> {{ news.views }} marta ko'rilgan</span>
+          {% if news.category %}<span class="ms-3" style="background:{{ news.category.color }};color:#fff;padding:2px 10px;border-radius:3px;font-size:12px;">{{ news.category.name_uz }}</span>{% endif %}
+        </div>
+        <div class="news-body" style="line-height:1.9;font-size:15.5px;">{{ news.body_uz|safe }}</div>
+      </div>
+      <div class="col-lg-4">
+        {% if related %}
+        <div class="card p-4" style="border-radius:12px;">
+          <h6 style="font-family:var(--font-secondary);font-weight:700;margin-bottom:16px;">Boshqa yangiliklar</h6>
+          {% for item in related %}
+          <div style="border-bottom:1px solid #f0f0f0;padding-bottom:12px;margin-bottom:12px;">
+            {% if item.image %}<img src="{{ item.image.url }}" class="w-100 mb-2" style="border-radius:6px;height:80px;object-fit:cover;">{% endif %}
+            <a href="{% url 'news:detail' item.slug %}" style="font-size:13.5px;font-weight:600;color:var(--color-heading);display:block;line-height:1.4;">{{ item.title_uz|truncatechars:60 }}</a>
+            <span style="font-size:12px;color:var(--color-body);">{{ item.published_at|date:"d.m.Y" }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

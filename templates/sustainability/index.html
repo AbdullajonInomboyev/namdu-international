@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+{% block title %}Barqarorlik va SDG{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">Barqarorlik va SDG</li>
+    </ul>
+    <h1 class="breadcrumb-title">Sustainability & SDGs</h1>
+    <p style="color:rgba(255,255,255,.7);">THE Impact Rankings · WURI · GreenMetric</p>
+  </div>
+</div>
+
+<!-- Green Metrics -->
+{% if metrics %}
+<div style="background:#f0faf5;padding:50px 0;">
+  <div class="container">
+    <div class="section-title section-center mb-4">
+      <h2 class="title" style="font-size:26px;">Green Campus Ko'rsatkichlari</h2>
+      <span class="shape-line"></span>
+    </div>
+    <div class="row g-4 justify-content-center">
+      {% for metric in metrics %}
+      <div class="col-lg-2 col-md-4 col-6">
+        <div class="text-center p-3" style="background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+          <div style="font-size:32px;font-weight:800;color:var(--color-primary);font-family:var(--font-secondary);">{{ metric.value }}{% if metric.unit %}<span style="font-size:16px;">{{ metric.unit }}</span>{% endif %}</div>
+          <div style="font-size:13px;color:var(--color-body);margin-top:6px;">{{ metric.get_category_display }}</div>
+          {% if metric.description_uz %}<div style="font-size:12px;color:#888;margin-top:4px;">{{ metric.description_uz }}</div>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- SDG Goals -->
+<div class="edu-section">
+  <div class="container">
+    <div class="section-title section-center mb-5">
+      <h2 class="title">Universitetimiz ta'sir qilayotgan SDGlar</h2>
+      <span class="shape-line"></span>
+    </div>
+    <div class="row g-4">
+      {% for sdg in sdgs %}
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card p-4" style="border-radius:12px;border-top:4px solid {{ sdg.color }};">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div style="width:50px;height:50px;border-radius:50%;background:{{ sdg.color }};display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;font-family:var(--font-secondary);flex-shrink:0;">{{ sdg.number }}</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:{{ sdg.color }};text-transform:uppercase;letter-spacing:1px;">SDG {{ sdg.number }}</div>
+              <h6 style="font-size:15px;margin:0;font-family:var(--font-secondary);">{{ sdg.name_uz }}</h6>
+            </div>
+          </div>
+          {% if sdg.namdu_activities_uz %}<p style="font-size:13.5px;color:var(--color-body);line-height:1.7;margin:0;">{{ sdg.namdu_activities_uz }}</p>{% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5"><p style="color:var(--color-body);">SDG maqsadlar admin paneldan qo'shiladi</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

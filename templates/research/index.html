@@ -1,0 +1,91 @@
+{% extends "base/base.html" %}
+{% block title %}Ilmiy Faoliyat{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">Ilmiy Faoliyat</li>
+    </ul>
+    <h1 class="breadcrumb-title">Research & Innovation</h1>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="counterup-area">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3 col-6"><div class="counter-item"><span class="count-number">{{ total_pubs }}</span><span class="count-label">Jami nashrlar</span></div></div>
+      <div class="col-lg-3 col-6"><div class="counter-item"><span class="count-number">{{ total_citations }}</span><span class="count-label">Jami iqtiboslar</span></div></div>
+      <div class="col-lg-3 col-6"><div class="counter-item"><span class="count-number">{{ grants.count }}</span><span class="count-label">Aktiv grantlar</span></div></div>
+      <div class="col-lg-3 col-6"><div class="counter-item"><span class="count-number">{{ areas.count }}</span><span class="count-label">Ilmiy sohalar</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="edu-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        <div class="section-title section-left mb-4">
+          <h2 class="title" style="font-size:26px;">Scopus Nashrlar</h2>
+          <span class="shape-line"></span>
+        </div>
+        <!-- Filter -->
+        <div class="d-flex gap-2 flex-wrap mb-4">
+          <a href="?" class="tab-btn {% if not selected_quartile %}active{% endif %}">Barchasi</a>
+          {% for q in quartile_list %}
+          <a href="?quartile={{ q }}" class="tab-btn {% if selected_quartile == q %}active{% endif %}">{{ q }}</a>
+          {% endfor %}
+        </div>
+        {% for pub in page_obj %}
+        <div class="card p-4 mb-3" style="border-radius:10px;border-left:4px solid {% if pub.quartile == 'Q1' %}#1ab69d{% elif pub.quartile == 'Q2' %}#1ba2db{% elif pub.quartile == 'OA' %}#3eb75e{% else %}#aaa{% endif %};">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <div>
+              {% if pub.quartile %}<span style="font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;background:{% if pub.quartile == 'Q1' %}#e8f9f4{% elif pub.quartile == 'Q2' %}#e8f4ff{% else %}#f5f5f5{% endif %};color:{% if pub.quartile == 'Q1' %}#1ab69d{% elif pub.quartile == 'Q2' %}#1ba2db{% else %}#888{% endif %};">{{ pub.quartile }}</span>{% endif %}
+              <h6 class="mt-2 mb-1" style="font-size:14.5px;line-height:1.4;">{% if pub.url %}<a href="{{ pub.url }}" target="_blank" style="color:var(--color-heading);">{{ pub.title }}</a>{% else %}{{ pub.title }}{% endif %}</h6>
+              <p style="font-size:12.5px;color:var(--color-body);margin:0;">{{ pub.authors|truncatechars:80 }}</p>
+              <p style="font-size:12.5px;color:var(--color-body);margin-top:4px;"><i class="ri-book-line"></i> {{ pub.journal }} · {{ pub.year }}</p>
+            </div>
+            <div class="text-end flex-shrink-0">
+              <div style="font-size:20px;font-weight:800;color:var(--color-primary);">{{ pub.citations }}</div>
+              <div style="font-size:11px;color:var(--color-body);">iqtibos</div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-5"><i class="ri-article-line" style="font-size:64px;color:#ddd;"></i><p class="mt-3" style="color:var(--color-body);">Nashrlar admin paneldan qo'shiladi</p></div>
+        {% endfor %}
+        {% if page_obj.has_other_pages %}
+        <ul class="edu-pagination mt-4">
+          {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="ri-arrow-left-s-line"></i></a></li>{% endif %}
+          {% for num in page_obj.paginator.page_range %}<li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endfor %}
+          {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="ri-arrow-right-s-line"></i></a></li>{% endif %}
+        </ul>
+        {% endif %}
+      </div>
+      <div class="col-lg-4">
+        {% if grants %}
+        <div class="card p-4 mb-4" style="border-radius:12px;">
+          <h6 style="font-family:var(--font-secondary);font-weight:700;margin-bottom:16px;"><i class="ri-flask-line" style="color:var(--color-primary);"></i> Aktiv Grantlar</h6>
+          {% for grant in grants %}
+          <div style="border-bottom:1px solid #f0f0f0;padding-bottom:12px;margin-bottom:12px;">
+            <div style="font-size:13.5px;font-weight:600;color:var(--color-heading);">{{ grant.title_uz|truncatechars:50 }}</div>
+            <div style="font-size:12px;color:var(--color-body);margin-top:4px;">{{ grant.funder }}</div>
+            <div style="font-size:12px;color:var(--color-primary);margin-top:2px;font-weight:600;">{{ grant.principal_investigator }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="card p-4" style="border-radius:12px;">
+          <h6 style="font-family:var(--font-secondary);font-weight:700;margin-bottom:16px;">Tezkor havolalar</h6>
+          <a href="https://www.scopus.com" target="_blank" class="d-flex align-items-center gap-2 py-2" style="color:var(--color-heading);border-bottom:1px solid #f0f0f0;font-size:13.5px;"><i class="ri-external-link-line" style="color:var(--color-primary);"></i> Scopus</a>
+          <a href="https://scholar.google.com" target="_blank" class="d-flex align-items-center gap-2 py-2" style="color:var(--color-heading);border-bottom:1px solid #f0f0f0;font-size:13.5px;"><i class="ri-external-link-line" style="color:var(--color-primary);"></i> Google Scholar</a>
+          <a href="https://orcid.org" target="_blank" class="d-flex align-items-center gap-2 py-2" style="color:var(--color-heading);font-size:13.5px;"><i class="ri-external-link-line" style="color:var(--color-primary);"></i> ORCID</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

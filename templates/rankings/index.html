@@ -1,0 +1,49 @@
+{% extends "base/base.html" %}
+{% block title %}Reytinglar{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">Reytinglar</li>
+    </ul>
+    <h1 class="breadcrumb-title">Rankings & Recognition</h1>
+    <p style="color:rgba(255,255,255,.7);">QS, THE, WURI, GreenMetric va boshqa xalqaro reytinglar</p>
+  </div>
+</div>
+<div class="edu-section">
+  <div class="container">
+    <!-- Agency filter -->
+    <div class="section-tabs mb-5">
+      <a href="{% url 'rankings:index' %}" class="tab-btn {% if not selected_agency %}active{% endif %}">Barchasi</a>
+      {% for agency in agencies %}
+      <a href="?agency={{ agency.pk }}" class="tab-btn {% if selected_agency == agency.pk|stringformat:'s' %}active{% endif %}">{{ agency.short_name }}</a>
+      {% endfor %}
+    </div>
+    <div class="row g-4">
+      {% for ranking in rankings %}
+      <div class="col-lg-6 col-12">
+        <div class="card p-4" style="border-radius:12px;border-left:4px solid var(--color-primary);">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <span style="font-size:11px;font-weight:700;background:var(--color-lighten01);color:var(--color-primary);padding:2px 10px;border-radius:3px;">{{ ranking.agency.short_name }} · {{ ranking.year }}</span>
+              <h6 class="mt-2 mb-1" style="font-size:15px;font-family:var(--font-secondary);">{{ ranking.ranking_name }}</h6>
+              {% if ranking.category %}<p style="font-size:12.5px;color:var(--color-body);margin:0;">{{ ranking.category }}</p>{% endif %}
+            </div>
+            <div class="text-end">
+              <div style="font-size:28px;font-weight:800;color:var(--color-primary);font-family:var(--font-secondary);line-height:1;">{{ ranking.position }}</div>
+              {% if ranking.score %}<div style="font-size:12px;color:var(--color-body);">{{ ranking.score }} ball</div>{% endif %}
+            </div>
+          </div>
+          {% if ranking.certificate %}<a href="{{ ranking.certificate.url }}" target="_blank" class="edu-btn btn-outline btn-small mt-3"><i class="ri-download-line"></i> Sertifikat</a>{% endif %}
+          {% if ranking.details_url %}<a href="{{ ranking.details_url }}" target="_blank" class="edu-btn btn-outline btn-small mt-3 ms-2"><i class="ri-external-link-line"></i> Batafsil</a>{% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5"><i class="ri-trophy-line" style="font-size:64px;color:#ddd;"></i><p class="mt-3" style="color:var(--color-body);">Reytinglar admin paneldan qo'shiladi</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

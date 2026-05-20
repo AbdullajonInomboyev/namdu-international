@@ -1,0 +1,250 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html class="no-js" lang="{{ LANGUAGE_CODE }}">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{% block title %}{% trans "Xalqaro Bo'lim" %}{% endblock %} | NamDU</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="{% block meta_description %}{{ site_settings.meta_description_uz }}{% endblock %}">
+
+<!-- Fonts — namdu.uz'dan aynan -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Spartan:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+
+<!-- Remixicon (namdu.uz'dagi ikonkalar) -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+<!-- NamDU asosiy CSS (local) -->
+<link rel="stylesheet" href="{% static 'css/namdu.css' %}">
+
+{% block extra_css %}{% endblock %}
+</head>
+<body class="edu-wrapper">
+
+<!-- ===== TOP BAR ===== -->
+<div class="header-top-bar">
+  <div class="container">
+    <div class="header-top">
+      <div class="header-top-left">
+        <ul class="header-info">
+          <li>
+            <a href="tel:{{ site_settings.phone }}">
+              <i class="ri-phone-line"></i>{{ site_settings.phone }}
+            </a>
+          </li>
+          <li>
+            <a href="mailto:{{ site_settings.email }}">
+              <i class="ri-mail-line"></i>{{ site_settings.email }}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="header-top-right">
+        <!-- Til tanlash -->
+        <div class="lang-switcher me-3">
+          <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <select name="language" onchange="this.form.submit()" class="lang-select">
+              {% get_available_languages as LANGUAGES %}
+              {% for code, name in LANGUAGES %}
+                <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>{{ name }}</option>
+              {% endfor %}
+            </select>
+          </form>
+        </div>
+        <a href="{{ site_settings.namdu_main_url }}" target="_blank" class="edu-btn btn-secondary btn-small">
+          NamDU.uz <i class="ri-external-link-line"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="edu-header header-style-2 header-sticky">
+  <div class="container">
+    <div class="header-navbar">
+      <!-- LOGO -->
+      <div class="header-brand">
+        <a href="{% url 'core:home' %}" class="logo-link">
+          <div class="namdu-logo-wrap">
+            <div class="logo-icon">
+              <i class="ri-earth-line"></i>
+            </div>
+            <div class="logo-text">
+              <span class="logo-title">NAMDU</span>
+              <span class="logo-sub">{% trans "Xalqaro Bo'lim" %}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- NAVIGATSIYA -->
+      <div class="header-mainnav">
+        <nav class="mainmenu-nav">
+          <ul class="mainmenu">
+            <li><a href="{% url 'core:home' %}" class="{% if request.resolver_match.app_name == 'core' %}active{% endif %}">{% trans "Bosh sahifa" %}</a></li>
+
+            <li class="has-droupdown">
+              <a href="{% url 'news:index' %}">{% trans "Yangiliklar" %}</a>
+              <ul class="submenu">
+                <li><a href="{% url 'news:index' %}">{% trans "Barcha yangiliklar" %}</a></li>
+                <li><a href="{% url 'conferences:index' %}">{% trans "Konferensiyalar" %}</a></li>
+              </ul>
+            </li>
+
+            <li class="has-droupdown">
+              <a href="#">{% trans "Hamkorlik" %}</a>
+              <ul class="submenu">
+                <li><a href="{% url 'partnerships:index' %}">{% trans "Hamkor universitetlar" %}</a></li>
+                <li><a href="{% url 'mobility:index' %}">{% trans "Akademik mobillik" %}</a></li>
+                <li><a href="{% url 'professors:index' %}">{% trans "Mehmon professorlar" %}</a></li>
+                <li><a href="{% url 'students:index' %}">{% trans "Xalqaro talabalar" %}</a></li>
+              </ul>
+            </li>
+
+            <li class="has-droupdown">
+              <a href="#">{% trans "Ilm-fan" %}</a>
+              <ul class="submenu">
+                <li><a href="{% url 'research:index' %}">{% trans "Nashrlar va grantlar" %}</a></li>
+                <li><a href="{% url 'rankings:index' %}">{% trans "Reytinglar" %}</a></li>
+              </ul>
+            </li>
+
+            <li class="has-droupdown">
+              <a href="#">{% trans "Barqarorlik" %}</a>
+              <ul class="submenu">
+                <li><a href="{% url 'sustainability:index' %}">{% trans "SDG Maqsadlar" %}</a></li>
+                <li><a href="{% url 'community:index' %}">{% trans "Jamoaviy loyihalar" %}</a></li>
+              </ul>
+            </li>
+
+            <li><a href="{% url 'reports:index' %}">{% trans "Hisobotlar" %}</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Mobile toggle -->
+      <div class="header-right">
+        <button class="hamburger-menu d-xl-none" id="mobileMenuToggle">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="mobileNavClose"><i class="ri-close-line"></i></button>
+    <ul class="mobile-mainmenu">
+      <li><a href="{% url 'core:home' %}">{% trans "Bosh sahifa" %}</a></li>
+      <li><a href="{% url 'news:index' %}">{% trans "Yangiliklar" %}</a></li>
+      <li><a href="{% url 'partnerships:index' %}">{% trans "Hamkor universitetlar" %}</a></li>
+      <li><a href="{% url 'mobility:index' %}">{% trans "Akademik mobillik" %}</a></li>
+      <li><a href="{% url 'research:index' %}">{% trans "Ilmiy nashrlar" %}</a></li>
+      <li><a href="{% url 'rankings:index' %}">{% trans "Reytinglar" %}</a></li>
+      <li><a href="{% url 'sustainability:index' %}">{% trans "SDG" %}</a></li>
+      <li><a href="{% url 'conferences:index' %}">{% trans "Konferensiyalar" %}</a></li>
+      <li><a href="{% url 'reports:index' %}">{% trans "Hisobotlar" %}</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- ===== ASOSIY KONTENT ===== -->
+<main id="main-wrapper">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="edu-footer footer-dark bg-image footer-style-3">
+  <div class="footer-top">
+    <div class="container">
+      <div class="row g-5">
+        <!-- Logo va manzil -->
+        <div class="col-lg-4 col-md-6">
+          <div class="edu-footer-widget">
+            <div class="logo mb-4">
+              <div class="footer-logo-wrap">
+                <i class="ri-earth-line footer-logo-icon"></i>
+                <div>
+                  <div class="footer-logo-title">NamDU</div>
+                  <div class="footer-logo-sub">{% trans "Xalqaro Bo'lim" %}</div>
+                </div>
+              </div>
+            </div>
+            <div class="widget-information">
+              <ul class="information-list">
+                <li><span><i class="ri-map-pin-line me-2"></i></span>{{ site_settings.address_uz }}</li>
+                <li><span><i class="ri-phone-line me-2"></i></span><a href="tel:{{ site_settings.phone }}">{{ site_settings.phone }}</a></li>
+                <li><span><i class="ri-mail-line me-2"></i></span><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></li>
+              </ul>
+            </div>
+            <!-- Social -->
+            <div class="footer-social mt-3">
+              {% if site_settings.telegram %}<a href="{{ site_settings.telegram }}" target="_blank"><i class="ri-telegram-line"></i></a>{% endif %}
+              {% if site_settings.facebook %}<a href="{{ site_settings.facebook }}" target="_blank"><i class="ri-facebook-line"></i></a>{% endif %}
+              {% if site_settings.instagram %}<a href="{{ site_settings.instagram }}" target="_blank"><i class="ri-instagram-line"></i></a>{% endif %}
+              {% if site_settings.youtube %}<a href="{{ site_settings.youtube }}" target="_blank"><i class="ri-youtube-line"></i></a>{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Tezkor havolalar -->
+        <div class="col-lg-4 col-sm-6">
+          <div class="edu-footer-widget quick-link-widget">
+            <h4 class="widget-title">{% trans "Bo'limlar" %}</h4>
+            <div class="inner">
+              <ul class="footer-link link-hover">
+                <li><a href="{% url 'news:index' %}">{% trans "Xalqaro yangiliklar" %}</a></li>
+                <li><a href="{% url 'rankings:index' %}">{% trans "Reytinglar" %}</a></li>
+                <li><a href="{% url 'sustainability:index' %}">{% trans "Barqarorlik va SDG" %}</a></li>
+                <li><a href="{% url 'research:index' %}">{% trans "Ilmiy faoliyat" %}</a></li>
+                <li><a href="{% url 'partnerships:index' %}">{% trans "Hamkorlar" %}</a></li>
+                <li><a href="{% url 'mobility:index' %}">{% trans "Akademik mobillik" %}</a></li>
+                <li><a href="{% url 'students:index' %}">{% trans "Xalqaro talabalar" %}</a></li>
+                <li><a href="{% url 'reports:index' %}">{% trans "Hisobotlar" %}</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- NamDU havolalar -->
+        <div class="col-lg-4 col-md-6">
+          <div class="edu-footer-widget">
+            <h4 class="widget-title">{% trans "Foydali havolalar" %}</h4>
+            <div class="inner">
+              <ul class="footer-link link-hover">
+                <li><a href="https://namdu.uz" target="_blank">NamDU Asosiy sayt</a></li>
+                <li><a href="https://my.namdu.uz" target="_blank">Hemis OTM</a></li>
+                <li><a href="https://gov.uz" target="_blank">O'zbekiston Hukumat Portali</a></li>
+                <li><a href="https://edu.uz" target="_blank">Oliy Ta'lim Vazirligi</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="copyright-area">
+    <div class="container">
+      <div class="copyright-content">
+        <p>Copyright © 2025 <a href="https://namdu.uz">NamDU</a>. {% trans "Barcha huquqlar himoyalangan" %}.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/namdu.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

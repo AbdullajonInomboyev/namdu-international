@@ -1,0 +1,60 @@
+{% extends "base/base.html" %}
+{% block title %}Mehmon Professorlar{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">Mehmon Professorlar</li>
+    </ul>
+    <h1 class="breadcrumb-title">Visiting Professors</h1>
+  </div>
+</div>
+<div class="edu-section">
+  <div class="container">
+    <div class="section-tabs mb-5">
+      <a href="{% url 'professors:index' %}" class="tab-btn {% if not selected_status %}active{% endif %}">Barchasi</a>
+      {% for val, label in statuses %}
+      <a href="?status={{ val }}" class="tab-btn {% if selected_status == val %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+    <div class="row g-4">
+      {% for prof in page_obj %}
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card p-4 h-100" style="border-radius:12px;">
+          <div class="d-flex gap-3 mb-3">
+            {% if prof.photo %}<img src="{{ prof.photo.url }}" style="width:70px;height:70px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            {% else %}<div style="width:70px;height:70px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ri-user-star-line" style="font-size:28px;color:#fff;"></i></div>{% endif %}
+            <div>
+              <h6 style="font-family:var(--font-secondary);font-size:15px;margin-bottom:4px;">{{ prof.full_name }}</h6>
+              {% if prof.title %}<p style="font-size:12.5px;color:var(--color-body);margin:0;">{{ prof.title }}</p>{% endif %}
+              {% if prof.country %}<p style="font-size:12.5px;color:var(--color-primary);margin:0;font-weight:600;"><i class="ri-map-pin-line"></i> {{ prof.country }}</p>{% endif %}
+            </div>
+          </div>
+          {% if prof.home_university %}<p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-building-4-line" style="color:var(--color-primary);"></i> {{ prof.home_university.name|truncatechars:45 }}</p>{% endif %}
+          {% if prof.specialization_uz %}<p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-flask-line" style="color:var(--color-primary);"></i> {{ prof.specialization_uz }}</p>{% endif %}
+          {% if prof.visit_start %}<p style="font-size:12.5px;color:var(--color-body);margin-bottom:6px;"><i class="ri-calendar-line" style="color:var(--color-primary);"></i> {{ prof.visit_start|date:"d.m.Y" }}{% if prof.visit_end %} — {{ prof.visit_end|date:"d.m.Y" }}{% endif %}</p>{% endif %}
+          {% if prof.lecture_topic_uz %}<p style="font-size:13px;color:var(--color-body);font-style:italic;margin:0;">"{{ prof.lecture_topic_uz|truncatechars:80 }}"</p>{% endif %}
+          <div class="mt-3">
+            <span style="font-size:11px;padding:2px 10px;border-radius:20px;font-weight:700;
+              {% if prof.status == 'current' %}background:#e8f9f0;color:#1a8a4a;{% elif prof.status == 'upcoming' %}background:#fff8e1;color:#c08000;{% else %}background:#f5f5f5;color:#888;{% endif %}">
+              {{ prof.get_status_display }}
+            </span>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5"><i class="ri-user-star-line" style="font-size:64px;color:#ddd;"></i><p class="mt-3" style="color:var(--color-body);">Mehmon professorlar admin paneldan qo'shiladi</p></div>
+      {% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <ul class="edu-pagination mt-5">
+      {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="ri-arrow-left-s-line"></i></a></li>{% endif %}
+      {% for num in page_obj.paginator.page_range %}<li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endfor %}
+      {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="ri-arrow-right-s-line"></i></a></li>{% endif %}
+    </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

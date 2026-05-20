@@ -1,0 +1,29 @@
+/* NamDU Xalqaro Admin Panel Custom Styles */
+:root {
+  --color-primary: #1ab69d;
+}
+
+.navbar-brand .brand-text {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.content-wrapper {
+  background: #f8f9fa;
+}
+
+.card {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+}
+
+.btn-primary {
+  background: #1ab69d;
+  border-color: #1ab69d;
+}
+
+.btn-primary:hover {
+  background: #158f7a;
+  border-color: #158f7a;
+}

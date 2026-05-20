@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+{% block title %}{{ conference.title_uz }}{% endblock %}
+{% block content %}
+<div class="edu-breadcrumb-area">
+  <div class="container">
+    <ul class="edu-breadcrumb">
+      <li><a href="{% url 'core:home' %}">Bosh sahifa</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li><a href="{% url 'conferences:index' %}">Konferensiyalar</a></li>
+      <li class="separator"><i class="ri-arrow-right-s-line"></i></li>
+      <li class="active">{{ conference.title_uz|truncatechars:40 }}</li>
+    </ul>
+    <h1 class="breadcrumb-title" style="font-size:28px;">{{ conference.title_uz }}</h1>
+  </div>
+</div>
+<div class="edu-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        {% if conference.cover_image %}<img src="{{ conference.cover_image.url }}" class="w-100 mb-4" style="border-radius:12px;max-height:400px;object-fit:cover;">{% endif %}
+        {% if conference.description_uz %}<div style="line-height:1.9;font-size:15px;">{{ conference.description_uz|safe }}</div>{% endif %}
+      </div>
+      <div class="col-lg-4">
+        <div class="card p-4" style="border-radius:12px;">
+          <h6 style="font-family:var(--font-secondary);font-weight:700;margin-bottom:16px;">Konferensiya ma'lumotlari</h6>
+          <div style="border-bottom:1px solid #f0f0f0;padding-bottom:10px;margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--color-body);">Sana</div>
+            <div style="font-weight:600;font-size:14px;">{{ conference.start_date|date:"d.m.Y" }}{% if conference.end_date %} — {{ conference.end_date|date:"d.m.Y" }}{% endif %}</div>
+          </div>
+          {% if conference.location_uz %}
+          <div style="border-bottom:1px solid #f0f0f0;padding-bottom:10px;margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--color-body);">Manzil</div>
+            <div style="font-weight:600;font-size:14px;">{{ conference.location_uz }}</div>
+          </div>
+          {% endif %}
+          <div style="border-bottom:1px solid #f0f0f0;padding-bottom:10px;margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--color-body);">Format</div>
+            <div style="font-weight:600;font-size:14px;">{{ conference.get_format_display }}</div>
+          </div>
+          {% if conference.participants_count %}
+          <div style="border-bottom:1px solid #f0f0f0;padding-bottom:10px;margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--color-body);">Ishtirokchilar</div>
+            <div style="font-weight:600;font-size:14px;">{{ conference.participants_count }}+ ta</div>
+          </div>
+          {% endif %}
+          {% if conference.countries_count %}
+          <div style="border-bottom:1px solid #f0f0f0;padding-bottom:10px;margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--color-body);">Davlatlar</div>
+            <div style="font-weight:600;font-size:14px;">{{ conference.countries_count }} ta</div>
+          </div>
+          {% endif %}
+          {% if conference.registration_deadline %}
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;color:var(--color-body);">Ariza muddati</div>
+            <div style="font-weight:600;font-size:14px;color:var(--color-secondary);">{{ conference.registration_deadline|date:"d.m.Y" }}</div>
+          </div>
+          {% endif %}
+          {% if conference.registration_url %}
+          <a href="{{ conference.registration_url }}" target="_blank" class="edu-btn btn-primary w-100 justify-content-center">Ro'yxatdan o'tish <i class="ri-arrow-right-line"></i></a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
