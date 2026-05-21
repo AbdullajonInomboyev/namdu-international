@@ -8,6 +8,7 @@ admin.site.site_title = "NamDU Admin"
 admin.site.index_title = "Boshqaruv paneli"
 
 urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('', include('apps.core.urls')),
