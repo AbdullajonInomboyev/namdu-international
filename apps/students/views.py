@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from django.db.models import Sum
 from .models import InternationalStudent, StudentCountryStat
 
 
@@ -17,5 +18,5 @@ def index(request):
         'featured': featured,
         'selected_degree': degree_filter,
         'degrees': InternationalStudent.DEGREE_CHOICES,
-        'total': InternationalStudent.objects.count(),
+        'total': StudentCountryStat.objects.aggregate(total=Sum('count'))['total'] or 0,
     })
