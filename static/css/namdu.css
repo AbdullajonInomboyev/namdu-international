@@ -1033,7 +1033,7 @@
      justify-content: center;
      cursor: pointer;
      transition: var(--transition);
-     backdrop-filter: blur(4px);
+     backdrop-filter: none;
    }
    
    .hero-nav:hover { background: var(--color-primary); border-color: var(--color-primary); }
