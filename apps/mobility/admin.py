@@ -10,7 +10,7 @@ class MobilityStudentInline(admin.TabularInline):
 
 @admin.register(MobilityProgram)
 class MobilityProgramAdmin(admin.ModelAdmin):
-    list_display = ('name', 'program_type', 'host_country', 'duration_months', 'deadline', 'is_active')
+    list_display = ('name', 'program_type', 'host_country', 'duration', 'deadline', 'is_active')
     list_filter = ('program_type', 'host_country', 'is_active')
     list_editable = ('is_active',)
     search_fields = ('name',)
