@@ -14,7 +14,7 @@ class MobilityProgram(models.Model):
                                         verbose_name=_("Qabul qiluvchi universitet"))
     host_country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True,
                                       verbose_name=_("Davlat"))
-    duration_months = models.PositiveIntegerField(_("Muddati (oy)"), default=6)
+    duration = models.CharField(_("Muddati"), max_length=50, default="6 oy")
     funding = models.CharField(_("Moliyalashtirish"), max_length=200, blank=True)
     description_uz = models.TextField(_("Tavsif (UZ)"), blank=True)
     description_en = models.TextField(_("Tavsif (EN)"), blank=True)
