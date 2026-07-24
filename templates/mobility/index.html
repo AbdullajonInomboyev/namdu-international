@@ -37,7 +37,7 @@
           </div>
           {% if program.host_country %}<p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-map-pin-line" style="color:var(--color-primary);"></i> {{ program.host_country }}</p>{% endif %}
           {% if program.host_university %}<p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-building-4-line" style="color:var(--color-primary);"></i> {{ program.host_university.name|truncatechars:40 }}</p>{% endif %}
-          <p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-time-line" style="color:var(--color-primary);"></i> {{ program.duration_months }} oy</p>
+          <p style="font-size:13px;color:var(--color-body);margin-bottom:6px;"><i class="ri-time-line"></i> {{ program.duration }}</p>
           {% if program.deadline %}<p style="font-size:13px;margin-bottom:10px;"><i class="ri-calendar-line" style="color:var(--color-secondary);"></i> <span style="color:var(--color-secondary);font-weight:600;">Muddat: {{ program.deadline|date:"d.m.Y" }}</span></p>{% endif %}
           {% if program.description_uz %}<p style="font-size:13px;color:var(--color-body);line-height:1.6;">{{ program.description_uz|truncatechars:120 }}</p>{% endif %}
           {% if program.url %}<a href="{{ program.url }}" target="_blank" class="edu-btn btn-primary btn-small mt-2">Batafsil <i class="ri-external-link-line"></i></a>{% endif %}
